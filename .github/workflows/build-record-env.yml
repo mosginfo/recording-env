@@ -5,7 +5,7 @@ on:
     branches:
       - 'master'
     paths:
-      - 'record-env'
+      - 'docker'
   workflow_dispatch:
 
 permissions:
