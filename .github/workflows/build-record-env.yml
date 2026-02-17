@@ -5,8 +5,9 @@ on:
     branches:
       - 'master'
     paths:
-      - 'docker'
+      - 'docker/**'
       - '.github/workflows/build-record-env.yml'
+      - '.github/matrix.json'
   workflow_dispatch:
 
 permissions:
@@ -18,8 +19,15 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  setup:
+    uses: kyzima-spb/gh-actions/.github/workflows/read-matrix.yml@master
+    with:
+      path: ./.github/matrix.json
   build:
+    needs: setup
     runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJSON(needs.setup.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
       -
@@ -35,6 +43,8 @@ jobs:
         id: meta
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            ${{ matrix.base }}
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -44,5 +54,7 @@ jobs:
         with:
           context: ./docker
           push: true
+          build-args: |
+            BASE=${{ matrix.base }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

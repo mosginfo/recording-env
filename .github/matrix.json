@@ -1,0 +1,6 @@
+{
+  "base": ["python:3.14-bookworm", "php:8.5.3-cli-bookworm"],
+  "include": [
+    {"latest": false}
+  ]
+}

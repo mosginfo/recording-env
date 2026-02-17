@@ -23,7 +23,7 @@ ENV LANG=ru_RU.UTF-8 \
     HOME=/home/user
 
 WORKDIR /home/user
-VOLUME [/home/user]
+VOLUME ["/home/user"]
 
 USER user
 
@@ -37,4 +37,4 @@ RUN git clone https://github.com/kyzima-spb/profile-dotfiles.git .dotfiles \
     && tmux kill-session -t build \
     && wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O- | sh -s -- --unattended --keep-zshrc
 
-CMD ["tmux"]
+#CMD ["tmux"]
